@@ -25,19 +25,46 @@ public class Grid2D : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+    // Update is called once per frame 0= verde y 1 = rojo
     void Update()
     {
         Vector3 mPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        UpdatePickedPiece(mPosition);
+
+        
+        bool click = Input.GetMouseButtonDown(0);
+        bool jugador = true;
+
+
+        if (click)
+        {
+            
+            if (jugador==true)
+            {
+                int jugador1 = 1;
+                UpdatePickedPiece(mPosition, jugador1);
+                jugador = false;
+            }
+            else
+            {
+                int jugador2 = 0;
+                UpdatePickedPiece(mPosition, jugador2);
+                jugador = true;
+
+            }
+
+            
+        }
+        
+
+
     }
 
-    void UpdatePickedPiece(Vector3 position)
+    void UpdatePickedPiece(Vector3 position, int a)
     {
-        Debug.Log(position.x + " - " + position.y);
+        //Debug.Log(position.x + " - " + position.y);
         int x = (int)(position.x + 0.5f);
         int y = (int)(position.y + 0.5f);
-        for(int _x = 0; _x < width; _x++)
+        /*for(int _x = 0; _x < width; _x++)
         {
             for(int _y = 0; _y < height; _y++)
             {
@@ -46,12 +73,36 @@ public class Grid2D : MonoBehaviour
 
             }
 
+        }*/
+        if (a==0)
+        {
+            if (x >= 0 && y >= 0 && x < width && y < height)
+            {
+                GameObject go = grid[x, y];
+                //Debug.Log(x+" - "+y);
+                go.GetComponent<Renderer>().material.SetColor("_Color", ColorJugador2());
+            }
         }
-        if (x >= 0 && y >= 0 && x < width && y < height)
+        else
+            if (x >= 0 && y >= 0 && x < width && y < height)
         {
             GameObject go = grid[x, y];
-            Debug.Log(x+" - "+y);
-            go.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+            //Debug.Log(x+" - "+y);
+            go.GetComponent<Renderer>().material.SetColor("_Color", ColorJugador1());
         }
+
     }
+    public Color ColorJugador1()
+    {
+        Color jugador1 = Color.red;
+        return jugador1;
+
+    }
+    public Color ColorJugador2()
+    {
+        Color jugador2 = Color.green;
+        return jugador2;
+
+    }
+
 }
