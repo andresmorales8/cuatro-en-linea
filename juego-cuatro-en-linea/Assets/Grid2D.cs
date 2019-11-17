@@ -8,6 +8,7 @@ public class Grid2D : MonoBehaviour
     public int height;
     public GameObject puzzlePiece;
     private GameObject[,] grid;
+    bool jugador = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,32 +31,72 @@ public class Grid2D : MonoBehaviour
     {
         Vector3 mPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        
         bool click = Input.GetMouseButtonDown(0);
-        bool jugador = true;
-
-
+        Color colorEsferaPrevia = Color.clear;
+        Color colorEsferaActual = Color.clear;
+        Color colorEsfera3 = Color.clear;
+        int x = (int)(mPosition.x + 0.5f);
+        int y = (int)(mPosition.y + 0.5f);
+        ComparadorDeColores comparadorDeColores = new ComparadorDeColores();
         if (click)
         {
-            
+            int turno=0;
             if (jugador==true)
             {
-                int jugador1 = 1;
-                UpdatePickedPiece(mPosition, jugador1);
-                jugador = false;
+                turno = 1;
+                UpdatePickedPiece(mPosition, turno);
+                GameObject esferaActual = grid[x, y];
+                    int xEsferaAnterior = x - 1;
+                    int yEsferaActual = y;
+
+                    if (xEsferaAnterior > -1 && xEsferaAnterior < width - 1)
+                    {
+
+                        GameObject esferaAnterior = grid[xEsferaAnterior, yEsferaActual];
+                        GameObject esfera3 = grid[xEsferaAnterior+2, yEsferaActual];
+
+                        colorEsferaPrevia = esferaAnterior.GetComponent<Renderer>().material.color;
+                        colorEsferaActual = esferaActual.GetComponent<Renderer>().material.color;
+                        colorEsfera3 = esfera3.GetComponent<Renderer>().material.color;
+
+                        
+
+                        esferaAnterior.GetComponent<Renderer>().material.color = comparadorDeColores.ColorAnterior(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
+                        esferaActual.GetComponent<Renderer>().material.color = comparadorDeColores.ColorActual(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
+                        esfera3.GetComponent<Renderer>().material.color = comparadorDeColores.ColorEsfera3(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
+
+
+                    }
             }
             else
             {
-                int jugador2 = 0;
-                UpdatePickedPiece(mPosition, jugador2);
-                jugador = true;
+                turno = 0;
+                UpdatePickedPiece(mPosition, turno);
+                GameObject esferaActual = grid[x, y];
+                    int xEsferaAnterior = x - 1;
+                    int yEsferaActual = y;
 
+                    if (xEsferaAnterior > -1 && xEsferaAnterior < width - 1)
+                    {
+
+                        GameObject esferaAnterior = grid[xEsferaAnterior, yEsferaActual];
+                        GameObject esfera3 = grid[xEsferaAnterior+2, yEsferaActual];
+
+                        colorEsferaPrevia = esferaAnterior.GetComponent<Renderer>().material.color;
+                        colorEsferaActual = esferaActual.GetComponent<Renderer>().material.color;
+                        colorEsfera3 = esfera3.GetComponent<Renderer>().material.color;
+
+                        
+
+                        esferaAnterior.GetComponent<Renderer>().material.color = comparadorDeColores.ColorAnterior(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
+                        esferaActual.GetComponent<Renderer>().material.color = comparadorDeColores.ColorActual(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
+                        esfera3.GetComponent<Renderer>().material.color = comparadorDeColores.ColorEsfera3(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
+
+                    }
             }
-
-            
+            jugador=!jugador;
         }
         
-
 
     }
 
@@ -106,3 +147,57 @@ public class Grid2D : MonoBehaviour
     }
 
 }
+
+public class ComparadorDeColores
+{
+
+    public Color ColorActual(Color anterior, Color actual, Color esfera3)
+    {
+
+        Color colorVerificado = actual;
+        Color colorDuplicado = Color.black;
+
+            if (anterior == actual && esfera3 == actual)
+            {
+
+                colorVerificado = colorDuplicado;
+
+            }
+
+        return colorVerificado;
+
+    }
+
+    public Color ColorAnterior(Color anterior, Color actual, Color esfera3)
+    {
+
+        Color colorVerificado = anterior;
+        Color colorDuplicado = Color.black;
+
+            if (anterior == actual && esfera3 == anterior)
+            {
+
+                colorVerificado = colorDuplicado;
+
+            }
+
+        return colorVerificado;
+    }
+    public Color ColorEsfera3(Color anterior, Color actual, Color esfera3)
+    {
+
+        Color colorVerificado = esfera3;
+        Color colorDuplicado = Color.black;
+
+            if (anterior == esfera3 && esfera3 == actual)
+            {
+
+                colorVerificado = colorDuplicado;
+
+            }
+
+        return colorVerificado;
+    }
+}
+
+
