@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class Grid2D : MonoBehaviour
@@ -8,7 +9,19 @@ public class Grid2D : MonoBehaviour
     public int height;
     public GameObject puzzlePiece;
     private GameObject[,] grid;
-    bool jugador = true;
+    bool jugador = false;
+    int turno;
+    int puntosJugador1=1;
+    int puntosJugador2=1;
+    public Text Jugador1;
+    public Text Jugador2;
+    public Text Jugador1_bonus;
+    public Text Jugador2_bonus;
+    double bonus = .6;
+    public Text Ganador;
+    public Text JugadorGanador;
+    double puntosParaGanar = 20;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,7 +39,13 @@ public class Grid2D : MonoBehaviour
         }
     }
 
-    // Update is called once per frame 0= verde y 1 = rojo
+    private void Awake()
+    {
+        Ganador.gameObject.SetActive(false);
+        JugadorGanador.gameObject.SetActive(false);
+
+    }
+    // Update is called once per frame
     void Update()
     {
         Vector3 mPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -40,7 +59,7 @@ public class Grid2D : MonoBehaviour
         ComparadorDeColores comparadorDeColores = new ComparadorDeColores();
         if (click)
         {
-            int turno=0;
+            
             if (jugador==true)
             {
                 turno = 1;
@@ -48,51 +67,75 @@ public class Grid2D : MonoBehaviour
                 GameObject esferaActual = grid[x, y];
                     int xEsferaAnterior = x - 1;
                     int yEsferaActual = y;
+                    
+                    puntosJugador1 += puntosJugador1;
+                    
+                    Jugador1.text= "Puntos: " +puntosJugador1;
+                    Jugador1_bonus.text = "Bonus: " + puntosJugador1*bonus;
+                if (puntosJugador1 > puntosParaGanar)
+                {
+                    Ganador.gameObject.SetActive(true);
+                    JugadorGanador.gameObject.SetActive(true);
+                    JugadorGanador.text = "Jugador 1";
+                    JugadorGanador.gameObject.GetComponent<Renderer>().material.color = Color.blue;
+                    
+                }
+                //if (xEsferaAnterior > -1 && xEsferaAnterior < width - 1)
+                //    {
 
-                    if (xEsferaAnterior > -1 && xEsferaAnterior < width - 1)
-                    {
+                //        GameObject esferaAnterior = grid[xEsferaAnterior, yEsferaActual];
+                //        GameObject esfera3 = grid[xEsferaAnterior+2, yEsferaActual];
 
-                        GameObject esferaAnterior = grid[xEsferaAnterior, yEsferaActual];
-                        GameObject esfera3 = grid[xEsferaAnterior+2, yEsferaActual];
-
-                        colorEsferaPrevia = esferaAnterior.GetComponent<Renderer>().material.color;
-                        colorEsferaActual = esferaActual.GetComponent<Renderer>().material.color;
-                        colorEsfera3 = esfera3.GetComponent<Renderer>().material.color;
+                //        colorEsferaPrevia = esferaAnterior.GetComponent<Renderer>().material.color;
+                //        colorEsferaActual = esferaActual.GetComponent<Renderer>().material.color;
+                //        colorEsfera3 = esfera3.GetComponent<Renderer>().material.color;
 
                         
 
-                        esferaAnterior.GetComponent<Renderer>().material.color = comparadorDeColores.ColorAnterior(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
-                        esferaActual.GetComponent<Renderer>().material.color = comparadorDeColores.ColorActual(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
-                        esfera3.GetComponent<Renderer>().material.color = comparadorDeColores.ColorEsfera3(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
+                //        esferaAnterior.GetComponent<Renderer>().material.color = comparadorDeColores.ColorAnterior(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
+                //        esferaActual.GetComponent<Renderer>().material.color = comparadorDeColores.ColorActual(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
+                //        esfera3.GetComponent<Renderer>().material.color = comparadorDeColores.ColorEsfera3(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
 
 
-                    }
+                //    }
             }
             else
             {
-                turno = 0;
+                turno = 2;
                 UpdatePickedPiece(mPosition, turno);
                 GameObject esferaActual = grid[x, y];
                     int xEsferaAnterior = x - 1;
                     int yEsferaActual = y;
 
-                    if (xEsferaAnterior > -1 && xEsferaAnterior < width - 1)
-                    {
+                puntosJugador2 += puntosJugador2;
 
-                        GameObject esferaAnterior = grid[xEsferaAnterior, yEsferaActual];
-                        GameObject esfera3 = grid[xEsferaAnterior+2, yEsferaActual];
+                Jugador2.text = "Puntos: " + puntosJugador2;
+                Jugador2_bonus.text = "Bonus: " + puntosJugador2 * bonus;
+                if (puntosJugador2 > puntosParaGanar)
+                {
+                    Ganador.gameObject.SetActive(true);
+                    JugadorGanador.gameObject.SetActive(true);
+                    JugadorGanador.text = "Jugador 2";
+                    JugadorGanador.gameObject.GetComponent<Renderer>().material.color = Color.red;
+                    
+                }
+                //if (xEsferaAnterior > -1 && xEsferaAnterior < width - 1)
+                //    {
 
-                        colorEsferaPrevia = esferaAnterior.GetComponent<Renderer>().material.color;
-                        colorEsferaActual = esferaActual.GetComponent<Renderer>().material.color;
-                        colorEsfera3 = esfera3.GetComponent<Renderer>().material.color;
+                //        GameObject esferaAnterior = grid[xEsferaAnterior, yEsferaActual];
+                //        GameObject esfera3 = grid[xEsferaAnterior+2, yEsferaActual];
+
+                //        colorEsferaPrevia = esferaAnterior.GetComponent<Renderer>().material.color;
+                //        colorEsferaActual = esferaActual.GetComponent<Renderer>().material.color;
+                //        colorEsfera3 = esfera3.GetComponent<Renderer>().material.color;
 
                         
 
-                        esferaAnterior.GetComponent<Renderer>().material.color = comparadorDeColores.ColorAnterior(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
-                        esferaActual.GetComponent<Renderer>().material.color = comparadorDeColores.ColorActual(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
-                        esfera3.GetComponent<Renderer>().material.color = comparadorDeColores.ColorEsfera3(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
+                //        esferaAnterior.GetComponent<Renderer>().material.color = comparadorDeColores.ColorAnterior(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
+                //        esferaActual.GetComponent<Renderer>().material.color = comparadorDeColores.ColorActual(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
+                //        esfera3.GetComponent<Renderer>().material.color = comparadorDeColores.ColorEsfera3(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
 
-                    }
+                //    }
             }
             jugador=!jugador;
         }
@@ -102,25 +145,16 @@ public class Grid2D : MonoBehaviour
 
     void UpdatePickedPiece(Vector3 position, int a)
     {
-        //Debug.Log(position.x + " - " + position.y);
+        
         int x = (int)(position.x + 0.5f);
         int y = (int)(position.y + 0.5f);
-        /*for(int _x = 0; _x < width; _x++)
-        {
-            for(int _y = 0; _y < height; _y++)
-            {
-                GameObject go = grid[_x, _y];
-                go.GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
-
-            }
-
-        }*/
-        if (a==0)
+        
+        if (a==2)
         {
             if (x >= 0 && y >= 0 && x < width && y < height)
             {
                 GameObject go = grid[x, y];
-                //Debug.Log(x+" - "+y);
+                
                 go.GetComponent<Renderer>().material.SetColor("_Color", ColorJugador2());
             }
         }
@@ -128,20 +162,20 @@ public class Grid2D : MonoBehaviour
             if (x >= 0 && y >= 0 && x < width && y < height)
         {
             GameObject go = grid[x, y];
-            //Debug.Log(x+" - "+y);
+            
             go.GetComponent<Renderer>().material.SetColor("_Color", ColorJugador1());
         }
 
     }
     public Color ColorJugador1()
     {
-        Color jugador1 = Color.red;
+        Color jugador1 = Color.blue;
         return jugador1;
 
     }
     public Color ColorJugador2()
     {
-        Color jugador2 = Color.green;
+        Color jugador2 = Color.red;
         return jugador2;
 
     }
