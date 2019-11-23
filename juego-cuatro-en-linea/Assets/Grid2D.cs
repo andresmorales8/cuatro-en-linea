@@ -23,7 +23,7 @@ public class Grid2D : MonoBehaviour
     public Text JugadorGanador2;
     double puntosParaGanar = 20;
     bool limiteDeJuego;
-    private int[,] colores = new int[6, 6];
+    private int[,] colores = new int[10, 10];
 
     // Start is called before the first frame update
     void Start()
@@ -86,11 +86,12 @@ public class Grid2D : MonoBehaviour
 
                     Jugador1.text = "Puntos: " + puntosJugador1;
                     Jugador1_bonus.text = "Bonus: " + puntosJugador1 * bonus;
-                    if (puntosJugador1 > puntosParaGanar)
+                    limiteDeJuego = Comparador(mPosition);
+                    if (limiteDeJuego)//if (puntosJugador1 > puntosParaGanar)
                     {
                         //Ganador.gameObject.SetActive(true);
 
-                        limiteDeJuego = true;
+                        //limiteDeJuego = true;
                         JugadorGanador1.gameObject.SetActive(limiteDeJuego);
 
                     }
@@ -128,10 +129,11 @@ public class Grid2D : MonoBehaviour
 
                     Jugador2.text = "Puntos: " + puntosJugador2;
                     Jugador2_bonus.text = "Bonus: " + puntosJugador2 * bonus;
-                    if (puntosJugador2 > puntosParaGanar)
+                    limiteDeJuego = Comparador(mPosition);
+                    if (limiteDeJuego) //if (puntosJugador2 > puntosParaGanar)
                     {
                         //Ganador.gameObject.SetActive(true);
-                        limiteDeJuego = true;
+                        //limiteDeJuego = true;
                         JugadorGanador2.gameObject.SetActive(limiteDeJuego);
 
                     }
@@ -173,7 +175,7 @@ public class Grid2D : MonoBehaviour
                 GameObject go = grid[x, y];
 
                 go.GetComponent<Renderer>().material.SetColor("_Color", ColorJugador2());
-                RecorridoDiagonalDerechaArriba(position);
+                //RecorridoDiagonalDerechaArriba(position);
                 //RecorridoDiagonalDerechaAbajo();
                 //RecorridoDiagonalIzquierdaArriba();
                 //RecorridoDiagonalIzquierdaAbajo();
@@ -208,31 +210,141 @@ public class Grid2D : MonoBehaviour
 
     }
 
-    void RecorridoDiagonalDerechaArriba(Vector3 position)
-        {
+    //void RecorridoDiagonalDerechaArriba(Vector3 position)
+    //    {
+    //    int x = (int)(position.x + 0.5f);
+    //    int y = (int)(position.y + 0.5f);
+    //    Debug.Log("ganaste y la matriz es de: " + colores.Length);
+    //    if (x < (colores.Length-2)&& y < (colores.Length - 2))
+    //    {
+    //        for(var a = 0; a < 4; a++)
+    //        {
+    //            if (colores[x,y]==colores[x+1,y+1])
+    //            {
+    //                if (a == 4)
+    //                {
+    //                    Debug.Log("ganaste y la matriz es de: " + colores.Length);
+    //                }
+    //                else
+    //                {
+    //                    x += 1;
+    //                    y += 1;
+    //                }
+    //            }
+    //        }
+            
+    //    }
+    //    }
+
+    public bool Comparador(Vector3 position)
+    {
         int x = (int)(position.x + 0.5f);
         int y = (int)(position.y + 0.5f);
-        Debug.Log("ganaste y la matriz es de: " + colores.Length);
-        if (x < (colores.Length-2)&& y < (colores.Length - 2))
-        {
-            for(var a = 0; a < 4; a++)
+        int filas = (colores.Length / width)-1 ;
+        int columnas = (colores.Length / height)-1;
+        int contador = 4;
+        int nEsferas = 2;
+        bool esferasEnlinea = false;
+
+        /*if (x < width-3 && y < height-3)
+        {*/
+            //Debug.Log("cumple el rango");
+            for (int i = 0; i < filas; i++)
             {
-                if (colores[x,y]==colores[x+1,y+1])
+                int n = i+1; 
+                if (((colores[i, y] != 0) || (colores[n, y] != 0)) && (n<filas))
                 {
-                    if (a == 4)
+
+                    if (colores[i, y] == colores[i + 1, y])
                     {
-                        Debug.Log("ganaste y la matriz es de: " + colores.Length);
+                        Debug.Log("cumple "+ nEsferas +" esferas" + filas);
+                        
+                        if (nEsferas==4)
+                        {
+                            esferasEnlinea = true;
+                        }
+                        contador++;
+                        nEsferas++;
                     }
                     else
                     {
-                        x += 1;
-                        y += 1;
-                    }
+                        Debug.Log("No cumple esferas" + filas);
+                        nEsferas = 2;
+
+                }
+
                 }
             }
-            
-        }
-        }
+            //if(esferasEnlinea == false)
+            //{
+                for (int i = 0; i < columnas; i++)
+                {
+                    int n = i + 1;
+                    if (((colores[x, i] != 0) || (colores[x, n] != 0)) && (n < columnas))
+                    {
+
+                        if (colores[x, i] == colores[x, i + 1])
+                        {
+                            Debug.Log("cumple " + nEsferas + " esferas" + filas);
+
+                            if (nEsferas == 4)
+                            {
+                                esferasEnlinea = true;
+                            }
+                            contador++;
+                            nEsferas++;
+                        }
+                        else
+                        {
+                            Debug.Log("No cumple esferas" + filas);
+                            nEsferas = 2;
+
+                    }
+
+                    }
+                }
+                for (int i = 0; i < filas; i++)
+                {
+                    for (int j = 0; j < columnas; j++)
+                    {
+                    int c = j + 1;
+                    int f = i + 1;
+                    if (((colores[i, j] != 0) || (colores[f, c] != 0)) && ((c < columnas) || (f<filas)))
+                    {
+
+                        if (colores[i, j] == colores[f, c])
+                        {
+                            Debug.Log("cumple " + nEsferas + " esferas d" + filas);
+
+                            if (nEsferas == 4)
+                            {
+                                esferasEnlinea = true;
+                            }
+                            contador++;
+                            nEsferas++;
+                        }
+                        else
+                        {
+                            Debug.Log("No cumple esferas d" + filas);
+                            nEsferas = 2;
+                        }
+
+                    }
+
+                    }
+
+                }
+            //}
+
+        
+
+
+
+
+        return esferasEnlinea;
+
+
+    }
         
 
 
