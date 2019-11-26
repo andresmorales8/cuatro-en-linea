@@ -195,7 +195,7 @@ public class Grid2D : MonoBehaviour
 
         if (a == 2)
         {
-            if (x >= 0 && y >= 0 && x < width && y < height)
+            if (x >= 0f && y >= 0f && x < width && y < height)
             {
                 GameObject go = grid[x, y];
 
