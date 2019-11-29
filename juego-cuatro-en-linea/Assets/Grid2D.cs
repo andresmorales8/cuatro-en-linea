@@ -21,6 +21,8 @@ public class Grid2D : MonoBehaviour
     //public Text Ganador;
     public Text JugadorGanador1;
     public Text JugadorGanador2;
+    public GameObject ReStart;
+
     int puntosParaGanar = 50;
     int puntosTotalesJugador1=0;
     int puntosTotalesJugador2=0;
@@ -50,9 +52,10 @@ public class Grid2D : MonoBehaviour
 
     private void Awake()
     {
-        //Ganador.gameObject.SetActive(false);
         JugadorGanador1.gameObject.SetActive(limiteDeJuego);
         JugadorGanador2.gameObject.SetActive(limiteDeJuego);
+        ReStart.gameObject.SetActive(limiteDeJuego);
+
 
 
     }
@@ -67,7 +70,6 @@ public class Grid2D : MonoBehaviour
         Color colorEsfera3 = Color.clear;
         int x = (int)(mPosition.x + 0.5f);
         int y = (int)(mPosition.y + 0.5f);
-        ComparadorDeColores comparadorDeColores = new ComparadorDeColores();
         if (click && limiteDeJuego == false)
         {
             GameObject esferaActual1 = grid[x, y];
@@ -102,32 +104,13 @@ public class Grid2D : MonoBehaviour
                     puntosJugador1++;
                     
                     
-                    if (limiteDeJuego || (puntosTotalesJugador1 > puntosParaGanar))//if (puntosJugador1 > puntosParaGanar)
+                    if (limiteDeJuego || (puntosTotalesJugador1 > puntosParaGanar))
                     {
-                        //Ganador.gameObject.SetActive(true);
-
-                        //limiteDeJuego = true;
                         JugadorGanador1.gameObject.SetActive(limiteDeJuego);
+                        ReStart.gameObject.SetActive(limiteDeJuego);
+
 
                     }
-                    //if (xEsferaAnterior > -1 && xEsferaAnterior < width - 1)
-                    //    {
-
-                    //        GameObject esferaAnterior = grid[xEsferaAnterior, yEsferaActual];
-                    //        GameObject esfera3 = grid[xEsferaAnterior+2, yEsferaActual];
-
-                    //        colorEsferaPrevia = esferaAnterior.GetComponent<Renderer>().material.color;
-                    //        colorEsferaActual = esferaActual.GetComponent<Renderer>().material.color;
-                    //        colorEsfera3 = esfera3.GetComponent<Renderer>().material.color;
-
-
-
-                    //        esferaAnterior.GetComponent<Renderer>().material.color = comparadorDeColores.ColorAnterior(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
-                    //        esferaActual.GetComponent<Renderer>().material.color = comparadorDeColores.ColorActual(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
-                    //        esfera3.GetComponent<Renderer>().material.color = comparadorDeColores.ColorEsfera3(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
-
-
-                    //    }
                 }
                 else
                 {
@@ -155,30 +138,14 @@ public class Grid2D : MonoBehaviour
                     puntosJugador2++;
                     
                     
-                    if (limiteDeJuego || (puntosTotalesJugador2 > puntosParaGanar)) //if (puntosJugador2 > puntosParaGanar)
+                    if (limiteDeJuego || (puntosTotalesJugador2 > puntosParaGanar))
                     {
-                        //Ganador.gameObject.SetActive(true);
-                        //limiteDeJuego = true;
+
                         JugadorGanador2.gameObject.SetActive(limiteDeJuego);
+                        ReStart.gameObject.SetActive(limiteDeJuego);
+
 
                     }
-                    //if (xEsferaAnterior > -1 && xEsferaAnterior < width - 1)
-                    //    {
-
-                    //        GameObject esferaAnterior = grid[xEsferaAnterior, yEsferaActual];
-                    //        GameObject esfera3 = grid[xEsferaAnterior+2, yEsferaActual];
-
-                    //        colorEsferaPrevia = esferaAnterior.GetComponent<Renderer>().material.color;
-                    //        colorEsferaActual = esferaActual.GetComponent<Renderer>().material.color;
-                    //        colorEsfera3 = esfera3.GetComponent<Renderer>().material.color;
-
-
-
-                    //        esferaAnterior.GetComponent<Renderer>().material.color = comparadorDeColores.ColorAnterior(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
-                    //        esferaActual.GetComponent<Renderer>().material.color = comparadorDeColores.ColorActual(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
-                    //        esfera3.GetComponent<Renderer>().material.color = comparadorDeColores.ColorEsfera3(colorEsferaPrevia, colorEsferaActual,colorEsfera3);
-
-                    //    }
                 }
                 jugador = !jugador;
             }
@@ -200,16 +167,6 @@ public class Grid2D : MonoBehaviour
                 GameObject go = grid[x, y];
 
                 go.GetComponent<Renderer>().material.SetColor("_Color", ColorJugador2());
-                //RecorridoDiagonalDerechaArriba(position);
-                //RecorridoDiagonalDerechaAbajo();
-                //RecorridoDiagonalIzquierdaArriba();
-                //RecorridoDiagonalIzquierdaAbajo();
-                //RecorridoArriba();
-                //RecorridoAbajo();
-                //RecorridoDerecha();
-                //RecorridoIzquierda();
-
-
 
             }
         }
@@ -235,31 +192,6 @@ public class Grid2D : MonoBehaviour
 
     }
 
-    //void RecorridoDiagonalDerechaArriba(Vector3 position)
-    //    {
-    //    int x = (int)(position.x + 0.5f);
-    //    int y = (int)(position.y + 0.5f);
-    //    Debug.Log("ganaste y la matriz es de: " + colores.Length);
-    //    if (x < (colores.Length-2)&& y < (colores.Length - 2))
-    //    {
-    //        for(var a = 0; a < 4; a++)
-    //        {
-    //            if (colores[x,y]==colores[x+1,y+1])
-    //            {
-    //                if (a == 4)
-    //                {
-    //                    Debug.Log("ganaste y la matriz es de: " + colores.Length);
-    //                }
-    //                else
-    //                {
-    //                    x += 1;
-    //                    y += 1;
-    //                }
-    //            }
-    //        }
-            
-    //    }
-    //    }
 
     public bool Comparador(Vector3 position)
     {
@@ -391,12 +323,10 @@ public class Grid2D : MonoBehaviour
         }
                 for (int i = 0; i < limite; i++)
                 {
-                    //for (int j = inicioLoopY; j < columnas; j++)
-                    //{
                     
                     int c = inicioLoopX + 1;
                     int f = inicioLoopY + 1;
-                    //Debug.Log("cumple " + nEsferas + " esferas dD" + " f " + filas+1 +" co "+ columnas+1 + " c" + c + " f " + f + " loopY "+inicioLoopY+" loopX "+inicioLoopX);
+                    
                     if ((colores[inicioLoopX, inicioLoopY] == 0) || (colores[c, f] == 0)) 
                     {
                         nEsferas=2;
@@ -432,9 +362,6 @@ public class Grid2D : MonoBehaviour
                         inicioLoopX = c;
                         inicioLoopY = f;
                         Debug.Log("iter "+c +"l"+limite);
-                    
-
-                    //}
 
                 }
         return esferasEnlinea;
@@ -476,19 +403,10 @@ public class Grid2D : MonoBehaviour
         
             for (int i = 0; i < limite; i++)
                 {
-                    //for (int j = inicioLoopY; j > 1; j--)
-                    //{
+
                     int c = inicioLoopX + 1;
                     int f = inicioLoopY - 1;
-                    /*if(c==-1)
-                    {
-                        c=0;
-                    }
 
-                    if (f==-1)
-                    {
-                        f=0;
-                    }*/
                     if ((colores[inicioLoopX, inicioLoopY] == 0) || (colores[c, f] == 0)) 
                     {
                         nEsferas=2;
@@ -526,10 +444,6 @@ public class Grid2D : MonoBehaviour
                         inicioLoopX=c;
                         inicioLoopY=f;
                         Debug.Log("iter dI "+c +"l"+limite+" suma "+sumaVertices);
-
-                    //}
-
-                    //}
 
                 }
         return esferasEnlinea;
@@ -619,57 +533,3 @@ public class Grid2D : MonoBehaviour
         return limite;
     }
 }
-
-public class ComparadorDeColores
-{
-
-    public Color ColorActual(Color anterior, Color actual, Color esfera3)
-    {
-
-        Color colorVerificado = actual;
-        Color colorDuplicado = Color.black;
-
-            if (anterior == actual && esfera3 == actual)
-            {
-
-                colorVerificado = colorDuplicado;
-
-            }
-
-        return colorVerificado;
-
-    }
-
-    public Color ColorAnterior(Color anterior, Color actual, Color esfera3)
-    {
-
-        Color colorVerificado = anterior;
-        Color colorDuplicado = Color.black;
-
-            if (anterior == actual && esfera3 == anterior)
-            {
-
-                colorVerificado = colorDuplicado;
-
-            }
-
-        return colorVerificado;
-    }
-    public Color ColorEsfera3(Color anterior, Color actual, Color esfera3)
-    {
-
-        Color colorVerificado = esfera3;
-        Color colorDuplicado = Color.black;
-
-            if (anterior == esfera3 && esfera3 == actual)
-            {
-
-                colorVerificado = colorDuplicado;
-
-            }
-
-        return colorVerificado;
-    }
-}
-
-
