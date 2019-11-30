@@ -11,25 +11,28 @@ public class Grid2D : MonoBehaviour
     private GameObject[,] grid;
     bool jugador = false;
     int turno;
-    int puntosJugador1 = 1;
-    int puntosJugador2 = 1;
+    int puntosJugador1 = 0;
+    int puntosJugador2 = 0;
     public Text Jugador1;
     public Text Jugador2;
     public Text Jugador1_bonus;
     public Text Jugador2_bonus;
-    int bonus = 20;
+    int bonus = 3;
     //public Text Ganador;
     public Text JugadorGanador1;
     public Text JugadorGanador2;
     public GameObject ReStart;
+    public bool ganador1 = false;
+    public bool ganador2 = false;
 
-    int puntosParaGanar = 50;
+    public int puntosParaGanar = 10;
     int puntosTotalesJugador1=0;
     int puntosTotalesJugador2=0;
     bool ganadorPorPuntos;
     int bonusJ1=0;
     int bonusJ2=0;
     bool limiteDeJuego;
+    int finalJuego;
     private int[,] colores = new int[10, 10];
 
     // Start is called before the first frame update
@@ -88,29 +91,59 @@ public class Grid2D : MonoBehaviour
 
                     colores[x, y] = 1;
                     Debug.Log("El valor del color en " + " x = " + x + "y = " + y + " es " + colores[x, y]);
-                    limiteDeJuego = Comparador(mPosition);
+                    //limiteDeJuego = Comparador(mPosition);
+                    finalJuego = Comparador(mPosition);
+                    if (finalJuego==4)
+                    {
+                        limiteDeJuego = true;
+                    }
+                    if (finalJuego==3)
+                    {
+                        bonusJ1 = puntosJugador1+bonus;
+                        puntosJugador1 = bonusJ1;
+                        
 
-                    
+                    }
+                    Jugador1_bonus.text = "Bonus: " + bonusJ1;
                     Jugador1.text = "Puntos: " + puntosJugador1;
 
-                    if (ganadorPorPuntos)
+                    if (limiteDeJuego || (puntosJugador1>puntosParaGanar))
                     {
-                        bonusJ1 = puntosJugador1 + bonus; 
+                        JugadorGanador1.gameObject.SetActive(true);
+                        ReStart.gameObject.SetActive(true);
+                        limiteDeJuego = true;
+
+
+                    }
+
+                    /*if (ganadorPorPuntos)
+                    {
+                        
+                        bonusJ1 = puntosJugador1+bonus;
+                        Debug.Log("b1 "+bonusJ1);
+                        puntosJugador1 = bonusJ1-puntosJugador1;
+                        Debug.Log("p1 " + puntosJugador1);
+
+
+                        if (puntosJugador1 > puntosParaGanar)
+                        {
+                            ganador1 = true;
+                        }
                     }
                     puntosTotalesJugador1 = puntosJugador1+bonusJ1;
-                    Jugador1_bonus.text = "Bonus: " + puntosTotalesJugador1 +"Total: "+puntosTotalesJugador1;
-                    
-                    
-                    puntosJugador1++;
-                    
-                    
-                    if (limiteDeJuego || (puntosTotalesJugador1 > puntosParaGanar))
+                    Jugador1_bonus.text = "Bonus: " + bonusJ1;
+                    Jugador1.text = "Puntos: " + puntosJugador1;
+                    if (limiteDeJuego || ganador1)
                     {
-                        JugadorGanador1.gameObject.SetActive(limiteDeJuego);
-                        ReStart.gameObject.SetActive(limiteDeJuego);
+                        JugadorGanador1.gameObject.SetActive(true);
+                        ReStart.gameObject.SetActive(true);
 
 
-                    }
+                    }*/
+
+
+
+
                 }
                 else
                 {
@@ -123,29 +156,55 @@ public class Grid2D : MonoBehaviour
 
                     colores[x, y] = 2;
                     Debug.Log("El valor del color en " + " x = " + x + "y = " + y + " es " + colores[x, y]);
-                    limiteDeJuego = Comparador(mPosition);
-
-                    Jugador2.text = "Puntos: " + puntosJugador2;
-
-                    if (ganadorPorPuntos)
+                    //limiteDeJuego = Comparador(mPosition);
+                    finalJuego = Comparador(mPosition);
+                    if (finalJuego == 4)
+                    {
+                        limiteDeJuego = true;
+                    }
+                    if (finalJuego == 3)
                     {
                         bonusJ2 = puntosJugador2 + bonus;
+                        puntosJugador2 = bonusJ2;
+
+
                     }
-                    puntosTotalesJugador2 = puntosJugador2+bonusJ2;
-                    Jugador2_bonus.text = "Bonus: " + puntosTotalesJugador2;
-                    
-                    
-                    puntosJugador2++;
-                    
-                    
-                    if (limiteDeJuego || (puntosTotalesJugador2 > puntosParaGanar))
+                    Jugador2_bonus.text = "Bonus: " + bonusJ2;
+                    Jugador2.text = "Puntos: " + puntosJugador2;
+
+                    if (limiteDeJuego || (puntosJugador2 > puntosParaGanar))
+                    {
+                        JugadorGanador2.gameObject.SetActive(true);
+                        ReStart.gameObject.SetActive(true);
+                        limiteDeJuego = true;
+
+                    }
+
+
+                    /*if (ganadorPorPuntos)
+                    {
+                        bonusJ2 = (puntosJugador2 + bonus)-puntosJugador2;
+                        puntosJugador2 = bonusJ2;
+                        if (bonusJ2 > puntosParaGanar)
+                        {
+                            ganador2 = true;
+                        }
+                    }
+                    //puntosTotalesJugador2 = puntosJugador2+bonusJ2;
+                    Jugador2_bonus.text = "Bonus: " + bonusJ2;
+                    Jugador2.text = "Puntos: " + puntosJugador2;
+                    if (limiteDeJuego || ganador2)
                     {
 
-                        JugadorGanador2.gameObject.SetActive(limiteDeJuego);
-                        ReStart.gameObject.SetActive(limiteDeJuego);
+                        JugadorGanador2.gameObject.SetActive(true);
+                        ReStart.gameObject.SetActive(true);
 
 
-                    }
+                    }*/
+
+
+
+
                 }
                 jugador = !jugador;
             }
@@ -193,30 +252,34 @@ public class Grid2D : MonoBehaviour
     }
 
 
-    public bool Comparador(Vector3 position)
+    public int Comparador(Vector3 position)
     {
         int x = (int)(position.x + 0.5f);
         int y = (int)(position.y + 0.5f);
         int filas = (colores.Length / width)-1 ;
         int columnas = (colores.Length / height)-1;
         int nEsferas = 2;
-        bool esferasEnlinea = false;
-        bool horizontal = Horizontal(x, y, filas, columnas, nEsferas);
-        bool vertical = Vertical(x, y, filas, columnas, nEsferas);
-        bool diagonalDerecha = DiagonalDerecha(x, y, filas, columnas, nEsferas);
-        bool diagonalIzquierda = DiagonalIzquierda(x, y, filas, columnas, nEsferas);
+        int esferasEnlinea = 0;
+        int horizontal = Horizontal(x, y, filas, columnas, nEsferas);
+        int vertical = Vertical(x, y, filas, columnas, nEsferas);
+        int diagonalDerecha = DiagonalDerecha(x, y, filas, columnas, nEsferas);
+        int diagonalIzquierda = DiagonalIzquierda(x, y, filas, columnas, nEsferas);
 
-            if(horizontal || vertical || diagonalDerecha || diagonalIzquierda){
-                esferasEnlinea = true;
+            if(horizontal == 4 || vertical == 4 || diagonalDerecha == 4 || diagonalIzquierda == 4){
+                esferasEnlinea = 4;
+            }
+            else if (horizontal == 3 || vertical == 3 || diagonalDerecha == 3 || diagonalIzquierda == 3)
+            {
+                esferasEnlinea = 3;
             }
         return esferasEnlinea;
 
 
     }
         
-    public bool Horizontal(int x, int y, int filas, int columnas, int nEsferas)
+    public int Horizontal(int x, int y, int filas, int columnas, int nEsferas)
     {
-        bool esferasEnlinea = false;
+        int esferasEnlinea = 0;
             for (int i = 0; i < filas; i++)
             {
                 int n = i+1; 
@@ -229,21 +292,21 @@ public class Grid2D : MonoBehaviour
                         
                         if (nEsferas==4)
                         {
-                            esferasEnlinea = true;
+                            esferasEnlinea = nEsferas;
                         }
                         else
                         if(nEsferas==3)
                         {
-                            ganadorPorPuntos= true;
+                            esferasEnlinea = nEsferas;
 
-                        }
+                    }
                         nEsferas++;
                     }
                     else
                     {
                         Debug.Log("No cumple esferasH" + filas);
                         nEsferas = 2;
-                        ganadorPorPuntos= false;
+                        //ganadorPorPuntos= false;
 
                 }
 
@@ -252,9 +315,9 @@ public class Grid2D : MonoBehaviour
         return esferasEnlinea;
     }
 
-    public bool Vertical(int x, int y, int filas, int columnas, int nEsferas)
+    public int Vertical(int x, int y, int filas, int columnas, int nEsferas)
     {
-        bool esferasEnlinea = false;
+        int esferasEnlinea = 0;
             for (int i = 0; i < columnas; i++)
                 {
                     int n = i + 1;
@@ -267,12 +330,12 @@ public class Grid2D : MonoBehaviour
 
                             if (nEsferas == 4)
                             {
-                                esferasEnlinea = true;
+                                esferasEnlinea = nEsferas;
                             }
                             else
                             if(nEsferas==3)
                             {
-                                ganadorPorPuntos= true;
+                                esferasEnlinea = nEsferas;
 
                             }
                             nEsferas++;
@@ -281,7 +344,7 @@ public class Grid2D : MonoBehaviour
                         {
                             Debug.Log("No cumple esferasV" + filas);
                             nEsferas = 2;
-                            ganadorPorPuntos= false;
+                            //ganadorPorPuntos= false;
 
 
                     }
@@ -291,9 +354,9 @@ public class Grid2D : MonoBehaviour
                 return esferasEnlinea;
     }
 
-    public bool DiagonalDerecha(int x, int y, int filas, int columnas, int nEsferas)
+    public int DiagonalDerecha(int x, int y, int filas, int columnas, int nEsferas)
     {
-        bool esferasEnlinea = false;
+        int esferasEnlinea = 0;
         
         int inicioLoopX=0; 
         int inicioLoopY=0;
@@ -341,12 +404,12 @@ public class Grid2D : MonoBehaviour
 
                             if (nEsferas == 4)
                             {
-                                esferasEnlinea = true;
+                                esferasEnlinea = nEsferas;
                             }
                             else
                             if(nEsferas==3)
                             {
-                                ganadorPorPuntos= true;
+                                esferasEnlinea = nEsferas;
 
                             }
                             nEsferas++;
@@ -355,7 +418,7 @@ public class Grid2D : MonoBehaviour
                         {
                             Debug.Log("No cumple esferas dD" + " f " + height +" c "+ width + " l"+limite+ " c" + c + " f " + f +" loopX "+inicioLoopX+ " loopY "+inicioLoopY);
                             nEsferas = 2;
-                            ganadorPorPuntos= false;
+                            //ganadorPorPuntos= false;
 
                         }
                     }
@@ -368,9 +431,9 @@ public class Grid2D : MonoBehaviour
     }
 
 
-    public bool DiagonalIzquierda(int x, int y, int filas, int columnas, int nEsferas)
+    public int DiagonalIzquierda(int x, int y, int filas, int columnas, int nEsferas)
     {
-        bool esferasEnlinea = false;
+        int esferasEnlinea = 0;
         int inicioLoopX=0; 
         int inicioLoopY=0;
         int sumaVertices= x+y;
@@ -421,12 +484,12 @@ public class Grid2D : MonoBehaviour
 
                             if (nEsferas == 4)
                             {
-                                esferasEnlinea = true;
+                                esferasEnlinea = nEsferas;
                             }
                             else
                             if(nEsferas==3)
                             {
-                                ganadorPorPuntos= true;
+                                esferasEnlinea = nEsferas;
 
                             }
                             nEsferas++;
@@ -436,7 +499,7 @@ public class Grid2D : MonoBehaviour
                         {
                             Debug.Log("No cumple esferas dI"+ " f " + height +" c "+ width + " l"+limite+ " c" + c + " f " + f +" loopX "+inicioLoopX+ " loopY "+inicioLoopY);
                             nEsferas = 2;
-                            ganadorPorPuntos= false;
+                            //ganadorPorPuntos= false;
 
                         }
                     }
