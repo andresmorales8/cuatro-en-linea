@@ -338,7 +338,7 @@ public class Grid2D : MonoBehaviour
                 //}
             }
         return esferasEnlinea;
-    }
+    } 
 
     public int Vertical(int x, int y, int filas, int columnas, int nEsferas, int turno)
     {
