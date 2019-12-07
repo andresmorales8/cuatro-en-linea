@@ -6,7 +6,7 @@ using UnityEngine;
 public class Grid2D : MonoBehaviour
 {
     public int width;
-    public int height;
+    public int height; 
     public GameObject puzzlePiece;
     private GameObject[,] grid;
     bool jugador = false;
@@ -100,7 +100,7 @@ public class Grid2D : MonoBehaviour
                     if (finalJuego==3)
                     {
                         bonusJ1 = puntosJugador1+bonus;
-                        puntosJugador1 = bonusJ1;
+                        puntosJugador1 = bonusJ1; //
                         
 
                     }
