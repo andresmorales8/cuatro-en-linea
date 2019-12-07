@@ -654,6 +654,9 @@ MonoBehaviour:
   JugadorGanador1: {fileID: 1059029450}
   JugadorGanador2: {fileID: 1464033278}
   ReStart: {fileID: 803338799}
+  ganador1: 0
+  ganador2: 0
+  puntosParaGanar: 20
 --- !u!4 &664944251
 Transform:
   m_ObjectHideFlags: 0

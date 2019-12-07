@@ -25,7 +25,7 @@ public class Grid2D : MonoBehaviour
     public bool ganador1 = false;
     public bool ganador2 = false;
 
-    public int puntosParaGanar = 10;
+    public int puntosParaGanar = 20;
     int puntosTotalesJugador1 = 0;
     int puntosTotalesJugador2 = 0;
     bool ganadorPorPuntos;
@@ -111,15 +111,16 @@ public class Grid2D : MonoBehaviour
                         {
                             limiteDeJuego = true;
                         }
-                        if (finalJuego == 3)
-                        {
-                            bonusJ1 = puntosJugador1 + bonus;
+                        //if (finalJuego == 3)
+                        //{
+                         int bonusT1 = Random.Range(1,4);
+                            bonusJ1 = puntosJugador1 + bonusT1;
                             puntosJugador1 = bonusJ1;
-                            if (puntosJugador1 >= contadorTurno1)
+                            /*if (puntosJugador1 >= contadorTurno1)
                             {
                                 puntosJugador1 = puntosJugador1 - 3;
-                            }
-                        }
+                            }*/
+                        //}
                         //bonusJ1 = puntosJugador1+bonus;
                         //puntosJugador1 = bonusJ1; 
 
@@ -131,8 +132,8 @@ public class Grid2D : MonoBehaviour
 
 
                         //}
-                        Jugador1_bonus.text = "Bonus: " + bonusJ1;
-                        Jugador1.text = "Puntos: " + contadorTurno1;
+                        Jugador1_bonus.text = "Bonus: " + bonusT1;
+                        Jugador1.text = "Puntos: " + puntosJugador1;
 
                         if (limiteDeJuego || (puntosJugador1 > puntosParaGanar))
                         {
@@ -191,18 +192,19 @@ public class Grid2D : MonoBehaviour
                         {
                             limiteDeJuego = true;
                         }
-                        if (finalJuego == 3)
-                        {
-                            bonusJ2 = puntosJugador2 + bonus;
+                        //if (finalJuego == 3)
+                        //{
+                            int bonusT2 = Random.Range(1, 4);
+                            bonusJ2 = puntosJugador2 + bonusT2;
                             puntosJugador2 = bonusJ2;
-                            if (puntosJugador2 >= contadorTurno2)
+                            /*if (puntosJugador2 >= contadorTurno2)
                             {
                                 puntosJugador2 = puntosJugador2 - 3;
-                            }
+                            }*/
 
-                        }
-                        Jugador2_bonus.text = "Bonus: " + bonusJ2;
-                        Jugador2.text = "Puntos: " + contadorTurno2;
+                        //}
+                        Jugador2_bonus.text = "Bonus: " + bonusT2;
+                        Jugador2.text = "Puntos: " + puntosJugador2;
 
                         if (limiteDeJuego || (puntosJugador2 > puntosParaGanar))
                         {
