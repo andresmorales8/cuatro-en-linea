@@ -2,42 +2,67 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
-
+/// <summary>
+/// Esta clase inicia el tablero de juego y determina el ganador por catidad de puntos o 4 en línea del mismo color en cualquier dirección.
+/// </summary>
 public class Grid2D : MonoBehaviour
 {
+    /// variables para el ancho del tablero de juego.
     public int width;
     public int height;
+    // variables para establecer la grid de juego o tablero de juego.
     public GameObject puzzlePiece;
     private GameObject[,] grid;
-    bool jugador = false;
+    //variable utilizada como switch para cambiar los turnos.
+    bool jugador = true;
+    //Variable utilizada para guardar el turno que le corresponde a cada jugador
     int turno;
+    //Variables utilizadas para acumular los turnos jugados.
+
+    int contadorTurno1 = 0;
+    int contadorTurno2 = 0;
+    //Variales utilizadas para acumular los puntos de cada jugador.
     int puntosJugador1 = 0;
     int puntosJugador2 = 0;
+    //Variables utilizadas para almacenar los textos de juego.
     public Text Jugador1;
     public Text Jugador2;
     public Text Jugador1_bonus;
     public Text Jugador2_bonus;
     public Text JugadorGanador1;
     public Text JugadorGanador2;
+    //Variable utilizada para hacer el switch al momento de reiniciar la escena.
     public GameObject ReStart;
+    //Variable utilizada para hacer el switch y bloquear la opciónn de juego cuando exista un ganador.
     public bool ganador1 = false;
     public bool ganador2 = false;
+    //Variable utilizada para definir la cantidad total de puntos para ganar el juego.
     public int puntosParaGanar = 50;
-    bool ganadorPorPuntos;
+    //Variables utilizadas para acumular los bonus por jugador.
     int bonusJ1 = 0;
     int bonusJ2 = 0;
+    //Variables utilizadas para determinar cuando el juego ha terminado.
     bool limiteDeJuego;
     string finalJuego = "";
     string ganadorJuego = "";
-    int contadorTurno1 = 0;
-    int contadorTurno2 = 0;
-
-
+    //Array utilizado para guardar los valores de los colores utilizados por los jugadores.
     private int[,] colores = new int[10, 10];
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// inicializa la clase llamando la función SetUp.
+    /// </summary>
     void Start()
     {
+        SetUp();
+    }
+
+    /// <summary>
+    /// Función utilizada para crear el tablero de juego con la cantidad de esferas asignadas a width y height.
+    /// </summary>
+    void SetUp()
+    {
+
+
         grid = new GameObject[width, height];
         for (int x = 0; x < width; x++)
         {
@@ -47,13 +72,15 @@ public class Grid2D : MonoBehaviour
                 Vector3 position = new Vector3(x, y, 0);
                 go.transform.position = position;
                 grid[x, y] = go;
-                 go.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+                go.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
                 colores[x, y] = 0;
             }
         }
-
     }
 
+    /// <summary>
+    /// Función utilizada para ocultar los textos de aviso del ganador del juego.
+    /// </summary>
     private void Awake()
     {
         JugadorGanador1.gameObject.SetActive(limiteDeJuego);
@@ -61,11 +88,22 @@ public class Grid2D : MonoBehaviour
         ReStart.gameObject.SetActive(limiteDeJuego);
 
     }
-    // Update is called once per frame
+
+    /// <summary>
+    /// Función utilizada para llamar la función turnos
+    /// </summary>
     void Update()
     {
         Vector3 mPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Turnos(mPosition);
+    }
 
+    /// <summary>
+    /// Función utilizada para asignar turno a cada jugador y evaluar si ha ganado por puntos o 4 esferas en línea del color de su turno en cualquier dirección.
+    /// </summary>
+    /// <param name="mPosition">Recibe como parámetro un Vector3 cuando el jugador da click y está dentro del rango asignado</param>
+    void Turnos(Vector3 mPosition)
+    { 
         bool click = Input.GetMouseButtonDown(0);
         Color colorEsferaPrevia = Color.clear;
         Color colorEsferaActual = Color.clear;
@@ -92,10 +130,8 @@ public class Grid2D : MonoBehaviour
 
                         int xEsferaAnterior = x - 1;
                         int yEsferaActual = y;
-                        Debug.Log("El valor del color en " + " x = " + x + "y = " + y + " es " + colores[x, y]);
 
                         colores[x, y] = 1;
-                        Debug.Log("El valor del color en " + " x = " + x + "y = " + y + " es " + colores[x, y]);
                     
                         finalJuego = Comparador(x, y, turno);
                         
@@ -127,7 +163,7 @@ public class Grid2D : MonoBehaviour
                             ReStart.gameObject.SetActive(true);
                             limiteDeJuego = true;
                             Debug.Log("El ganador es por: " + ganadorJuego);
-                            JugadorGanador1.text = "!Ganador Jugador 1! \n" + "Victoria por " + ganadorJuego;
+                            JugadorGanador1.text = "¡Ganador Jugador 1! \n" + "Victoria por " + ganadorJuego;
 
                         }
 
@@ -173,7 +209,7 @@ public class Grid2D : MonoBehaviour
                             ReStart.gameObject.SetActive(true);
                             limiteDeJuego = true;
                             Debug.Log("El ganador es por: " + ganadorJuego);
-                            JugadorGanador2.text = "!Ganador Jugador 2! \n" + "Victoria por " + ganadorJuego;
+                            JugadorGanador2.text = "¡Ganador Jugador 2! \n" + "Victoria por " + ganadorJuego;
 
                         }
 
@@ -183,7 +219,11 @@ public class Grid2D : MonoBehaviour
             }
         }
     }
-
+    /// <summary>
+    /// Función utilizada para determinar el color que corresponde a cada jugador
+    /// </summary>
+    /// <param name="position"> Parámetro position, es la ubicación donde el jugador ha dado click en el tablero de juego</param>
+    /// <param name="a"> Parámetro que corresponde al turno del jugador actual</param>
     void UpdatePickedPiece(Vector3 position, int a)
     {
 
@@ -207,19 +247,33 @@ public class Grid2D : MonoBehaviour
         }
 
     }
+    /// <summary>
+    /// Función utilizada para asignar color a la esfera donde da click el jugador 1.
+    /// </summary>
+    /// <returns>Retorna color blue a la esfera que el jugador 1 da click</returns>
     public Color ColorJugador1()
     {
         Color jugador1 = Color.blue;
         return jugador1;
 
     }
+    /// <summary>
+    /// Función utilizada para asignar color a la esfera donde da click el jugador 2.
+    /// </summary>
+    /// <returns>Retorna color blue a la esfera que el jugador 2 da click</returns>
     public Color ColorJugador2()
     {
         Color jugador2 = Color.red;
         return jugador2;
 
     }
-
+    /// <summary>
+    /// Función utilizada para llamar a las funciones comparadoras de las 4 esferas en línea del mismo color en cualquie dirección
+    /// </summary>
+    /// <param name="x">Parámetro en el eje x</param>
+    /// <param name="y">Parámetro en el eje y</param>
+    /// <param name="turno">Parámetro que corresponde al color a verificar las 4 esferas en línea</param>
+    /// <returns>Retorna el string de la dirección que encuentra las 4 esferas en línea</returns>
     public string Comparador(int x, int y, int turno)
     {
 
@@ -246,6 +300,16 @@ public class Grid2D : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Verifica si existen 4 esferas en línea del mismo color en Horizontal
+    /// </summary>
+    /// <param name="x">Parámetro en el eje x</param>
+    /// <param name="y">Parámetro en el eje y</param>
+    /// <param name="filas">Parámetro número total de filas</param>
+    /// <param name="columnas">Parámetro número total de columnas</param>
+    /// <param name="nEsferas">Parámetro donde debe iniciar el conteo cuando encuentra dos esferas en línea</param>
+    /// <param name="turno">Parámetro turno del color del jugador a verificar</param>
+    /// <returns>Retorna el entero 4</returns>
     public int Horizontal(int x, int y, int filas, int columnas, int nEsferas, int turno)
     {
         int esferasEnlinea = 0;
@@ -257,7 +321,7 @@ public class Grid2D : MonoBehaviour
 
             if (colores[i, y] == colores[i + 1, y])
             {
-                Debug.Log("cumple " + nEsferas + " esferasH" + filas + "turno " + turno);
+                Debug.Log("cumple " + nEsferas + " esferasH");
 
                 if (nEsferas == 4)
                 {
@@ -267,7 +331,7 @@ public class Grid2D : MonoBehaviour
             }
             else
             {
-                Debug.Log("No cumple esferasH" + filas);
+                Debug.Log("No cumple esferasH");
                 nEsferas = 2;
 
             }
@@ -276,7 +340,16 @@ public class Grid2D : MonoBehaviour
         }
         return esferasEnlinea;
     }
-
+    /// <summary>
+    /// Verifica si existen 4 esferas en línea del mismo color en Vertical
+    /// </summary>
+    /// <param name="x">Parámetro en el eje x</param>
+    /// <param name="y">Parámetro en el eje y</param>
+    /// <param name="filas">Parámetro número total de filas</param>
+    /// <param name="columnas">Parámetro número total de columnas</param>
+    /// <param name="nEsferas">Parámetro donde debe iniciar el conteo cuando encuentra dos esferas en línea</param>
+    /// <param name="turno">Parámetro turno del color del jugador a verificar</param>
+    /// <returns>Retorna el entero 4</returns>
     public int Vertical(int x, int y, int filas, int columnas, int nEsferas, int turno)
     {
         int esferasEnlinea = 0;
@@ -290,7 +363,7 @@ public class Grid2D : MonoBehaviour
             if (colores[x, i] == colores[x, i + 1])
             {
 
-                Debug.Log("cumple " + nEsferas + " esferasV" + filas);
+                Debug.Log("cumple " + nEsferas + " esferasV");
 
 
                 if (nEsferas == 4)
@@ -301,7 +374,7 @@ public class Grid2D : MonoBehaviour
                 }
             else
             {
-                Debug.Log("No cumple esferasV" + filas);
+                Debug.Log("No cumple esferasV");
                 nEsferas = 2;
 
             }
@@ -311,6 +384,16 @@ public class Grid2D : MonoBehaviour
         return esferasEnlinea;
     }
 
+    /// <summary>
+    /// Verifica si existen 4 esferas en línea del mismo color en DiagonalDerecha (diagonal ascendente)
+    /// </summary>
+    /// <param name="x">Parámetro en el eje x</param>
+    /// <param name="y">Parámetro en el eje y</param>
+    /// <param name="filas">Parámetro número total de filas</param>
+    /// <param name="columnas">Parámetro número total de columnas</param>
+    /// <param name="nEsferas">Parámetro donde debe iniciar el conteo cuando encuentra dos esferas en línea</param>
+    /// <param name="turno">Parámetro turno del color del jugador a verificar</param>
+    /// <returns>Retorna el entero 4</returns>
     public int DiagonalDerecha(int x, int y, int filas, int columnas, int nEsferas, int turno)
     {
         int esferasEnlinea = 0;
@@ -353,9 +436,9 @@ public class Grid2D : MonoBehaviour
             {
 
                 if (colores[inicioLoopX, inicioLoopY] == colores[c, f])
-                { 
+                {
 
-                Debug.Log("cumple " + nEsferas + " esferas dD" + " f " + height + " c " + width + " i" + i + " d " /*+ d*/ + " loopX ");// +inicioLoopX+ " loopY "+inicioLoopY);
+                    Debug.Log("cumple " + nEsferas + " esferas dD");
 
                 if (nEsferas == 4)
                 {
@@ -366,7 +449,7 @@ public class Grid2D : MonoBehaviour
             }
             else
             {
-                Debug.Log("No cumple esferas dD" + " f " + height + " c " + width + " i" + i + " d " /*+ d*/ + " loopX");
+                Debug.Log("No cumple esferas dD");
                 nEsferas = 2;
 
             }
@@ -378,7 +461,16 @@ public class Grid2D : MonoBehaviour
         return esferasEnlinea;
     }
 
-
+    /// <summary>
+    /// Verifica si existen 4 esferas en línea del mismo color en DiagonalIzquieda (diagonal descendente)
+    /// </summary>
+    /// <param name="x">Parámetro en el eje x</param>
+    /// <param name="y">Parámetro en el eje y</param>
+    /// <param name="filas">Parámetro número total de filas</param>
+    /// <param name="columnas">Parámetro número total de columnas</param>
+    /// <param name="nEsferas">Parámetro donde debe iniciar el conteo cuando encuentra dos esferas en línea</param>
+    /// <param name="turno">Parámetro turno del color del jugador a verificar</param>
+    /// <returns>Retorna el entero 4</returns>
     public int DiagonalIzquierda(int x, int y, int filas, int columnas, int nEsferas, int turno)
     {
         int esferasEnlinea = 0;
@@ -428,7 +520,7 @@ public class Grid2D : MonoBehaviour
                 if (colores[inicioLoopX, inicioLoopY] == colores[c, f])
                 {
 
-                Debug.Log("cumple " + nEsferas + " esferas dI" + " f " + height + " c " + width + " i" + i + " d " /*+ d*/ + " loopX");
+                Debug.Log("cumple " + nEsferas + " esferas dI");
 
 
                 if (nEsferas == 4)
@@ -441,7 +533,7 @@ public class Grid2D : MonoBehaviour
                 }
             else
             {
-                Debug.Log("No cumple esferas dI" + " f " + height + " c " + width + " i" + i + " d " /*+ d*/ + " loopX");
+                Debug.Log("No cumple esferas dI");
                 nEsferas = 2;
 
             }
@@ -453,7 +545,11 @@ public class Grid2D : MonoBehaviour
         }
         return esferasEnlinea;
     }
-
+    /// <summary>
+    /// Esta función es utilizada para carlcular el límite de iteracciones de la función DiagonalDerecha (diagonal ascendente)
+    /// </summary>
+    /// <param name="loop">Parámetro de donde inicia el loop para definir su límite</param>
+    /// <returns>Retorna el número de límite de iteracciones de la función DiagonalDerecha (diagonal ascendente)</returns>
     public int CalculoDeLimite(int loop)
     {
         int limite = 1;
@@ -494,7 +590,11 @@ public class Grid2D : MonoBehaviour
 
         return limite;
     }
-
+    /// <summary>
+    /// Esta función es utilizada para carlcular el límite de iteracciones de la función DiagonalIzquieda (diagonal descendente)
+    /// </summary>
+    /// <param name="loop">Parámetro de donde inicia el loop para definir su límite</param>
+    /// <returns>Retorna el número de límite de iteracciones de la función DiagonalIzquieda (diagonal descendente)</returns>
     public int CalculoDeLimiteDI(int loop)
     {
         int limite = 1;
